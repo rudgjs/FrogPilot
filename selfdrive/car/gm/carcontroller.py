@@ -18,21 +18,7 @@ CAMERA_CANCEL_DELAY_FRAMES = 10
 # Enforce a minimum interval between steering messages to avoid a fault
 MIN_STEER_MSG_INTERVAL_MS = 15
 
-def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.01):
-  # hyst params... TODO: move these to VehicleParams
-      # don't change pedal command for small oscillations within this value
-  # pedal_hyst_gap= 0.01
-  pedal_hyst_gap= pedal_hyst_gap_param
-  # for small pedal oscillations within pedal_hyst_gap, don't change the pedal command
-  if math.isclose(final_pedal, 0.0):
-    pedal_steady = 0.
-  elif final_pedal > pedal_steady + pedal_hyst_gap:
-    pedal_steady = final_pedal - pedal_hyst_gap
-  elif final_pedal < pedal_steady - pedal_hyst_gap:
-    pedal_steady = final_pedal + pedal_hyst_gap
-  final_pedal = pedal_steady
 
-  return final_pedal, pedal_steady
 class CarController:
   def __init__(self, dbc_name, CP, VM):
     self.CP = CP
@@ -58,9 +44,6 @@ class CarController:
 
     # FrogPilot variables
     self.use_ev_tables = False
-
-    #for BoltEV pedal
-    self.pedal_steady = 0.
 
   def update_frogpilot_variables(self, params):
     self.use_ev_tables = params.get_bool("EVTable")
@@ -138,6 +121,12 @@ class CarController:
 
     if self.CP.openpilotLongitudinalControl:
       # Gas/regen, brakes, and UI commands - all at 25Hz
+      if CC.longActive and actuators.accel < -1.5:
+        can_sends.append(gmcan.create_regen_paddle_command(self.packer_pt, CanBus.POWERTRAIN))
+        actuators.regenPaddle = True  # for icon
+      else:
+        actuators.regenPaddle = False # for icon
+
       if self.frame % 4 == 0:
         stopping = actuators.longControlState == LongCtrlState.stopping
         at_full_stop = CC.longActive and CS.out.standstill
