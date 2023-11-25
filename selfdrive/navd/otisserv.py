@@ -44,8 +44,8 @@ ee = 0.00669342162296594323
 
 class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
-    use_amap = params.get_int("RouteInput") == 1
-    use_gmap = params.get_int("RouteInput") == 2
+    use_amap = params.get_int("SearchInput") == 1
+    use_gmap = params.get_int("SearchInput") == 2
 
     if self.path.startswith('/fleetmanager'):
       # Redirect the request to the Flask app running on port 5050
@@ -136,8 +136,8 @@ class OtisServ(BaseHTTPRequestHandler):
         self.display_page_addr_input()
 
   def do_POST(self):
-    use_amap = params.get_int("RouteInput") == 1
-    use_gmap = params.get_int("RouteInput") == 2
+    use_amap = params.get_int("SearchInput") == 1
+    use_gmap = params.get_int("SearchInput") == 2
 
     postvars = self.parse_POST()
     # set_destination endpoint
