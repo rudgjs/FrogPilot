@@ -46,7 +46,7 @@ class CarController:
     self.last_steer_frame = 0
     self.last_button_frame = 0
     self.cancel_counter = 0
-    self.pedal_steady = 0.
+    #self.pedal_steady = 0.
 
     self.lka_steering_cmd_counter = 0
     self.lka_icon_status_last = (False, False)
@@ -69,6 +69,8 @@ class CarController:
   @staticmethod
   def calc_pedal_command(accel: float, long_active: bool) -> float:
     if not long_active: return 0.
+
+    self.pedal_steady = 0.
 
     zero = 0.1429  # 40/256
     if accel > 0.:
