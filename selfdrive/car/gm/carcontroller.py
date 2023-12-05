@@ -70,7 +70,7 @@ class CarController:
   def calc_pedal_command(accel: float, long_active: bool) -> float:
     if not long_active: return 0.
 
-    self.pedal_steady = 0.
+    pedal_steady = 0.
 
     zero = 0.1429  # 40/256
     if accel > 0.:
@@ -81,7 +81,7 @@ class CarController:
       pedal_gas = clip(zero + accel, 0., zero)  # Make brake the same size as gas, but clip to regen
 
     # apply Low pass filter
-    pedal_gas_lpf, self.pedal_steady = actuator_hystereses(pedal_gas, self.pedal_steady, 0.01)
+    pedal_gas_lpf, pedal_steady = actuator_hystereses(pedal_gas, pedal_steady, 0.01)
 
     return pedal_gas_lpf
 
