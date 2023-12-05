@@ -19,7 +19,7 @@ CAMERA_CANCEL_DELAY_FRAMES = 10
 # Enforce a minimum interval between steering messages to avoid a fault
 MIN_STEER_MSG_INTERVAL_MS = 15
 
-def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.01):
+def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.015):
   # hyst params... TODO: move these to VehicleParams
       # don't change pedal command for small oscillations within this value
   # pedal_hyst_gap= 0.01
@@ -82,7 +82,7 @@ class CarController:
       pedal_gas = clip(zero + accel, 0., zero)  # Make brake the same size as gas, but clip to regen
 
     # apply Low pass filter
-    pedal_gas_lpf, pedal_steady = actuator_hystereses(pedal_gas, pedal_steady, 0.01)
+    pedal_gas_lpf, pedal_steady = actuator_hystereses(pedal_gas, pedal_steady, 0.015)
 
     return pedal_gas_lpf
 
