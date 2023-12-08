@@ -74,12 +74,15 @@ class CarController:
     pedal_steady = 0.
 
     zero = 0.1667  # 40/256
-    if accel > 0.:
-      # Scales the accel from 0-1 to 0.156-1
-      pedal_gas = clip(((1 - zero) * accel + zero), 0., 1.)
-    else:
-      # if accel is negative, -0.1 -> 0.015625
-      pedal_gas = clip(zero + accel, 0., 1.0)  # Make brake the same size as gas, but clip to regen
+    accGain = interp(accel, [-4, 0, 2],[0.8333, zero, 0.8333])
+    # if accel > 0.:
+    #   # Scales the accel from 0-1 to 0.156-1
+    #   pedal_gas = clip((zero + accGain * accel), 0., 1.)
+    #
+    # else:
+    #   # if accel is negative, -0.1 -> 0.015625
+    #   pedal_gas = clip(zero + accel, 0., 1.0)  # Make brake the same size as gas, but clip to regen
+    pedal_gas = clip((zero + accGain * accel), 0., 1.)
 
     # apply Low pass filter
     pedal_gas_lpf, pedal_steady = actuator_hystereses(pedal_gas, pedal_steady, 0.017)
