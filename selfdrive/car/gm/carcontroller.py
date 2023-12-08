@@ -84,7 +84,7 @@ class CarController:
     # apply Low pass filter
     pedal_gas_lpf, pedal_steady = actuator_hystereses(pedal_gas, pedal_steady, 0.017)
 
-    return pedal_gas_lpf
+    return pedal_gas
 
 
   def update(self, CC, CS, now_nanos):
