@@ -68,7 +68,7 @@ class CarController:
     self.use_ev_tables = params.get_bool("EVTable")
 
   @staticmethod
-  def calc_pedal_command(accel, long_active: bool, ‎car_velocity) -> float:
+  def calc_pedal_command(accel: float, long_active: bool, car_velocity: int) -> float:
     if not long_active: return 0.
 
     accGain = 0.1429  # This value is the result of testing by several users.
