@@ -6,7 +6,6 @@ from opendbc.can.packer import CANPacker
 from openpilot.selfdrive.car import apply_driver_steer_torque_limits, create_gas_interceptor_command
 from openpilot.selfdrive.car.gm import gmcan
 from openpilot.selfdrive.car.gm.values import DBC, CanBus, CarControllerParams, CruiseButtons, GMFlags, CC_ONLY_CAR, EV_CAR
-import math
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 NetworkLocation = car.CarParams.NetworkLocation
@@ -19,7 +18,7 @@ CAMERA_CANCEL_DELAY_FRAMES = 10
 # Enforce a minimum interval between steering messages to avoid a fault
 MIN_STEER_MSG_INTERVAL_MS = 15
 
-def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.015):
+def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.01):
   # hyst params... TODO: move these to VehicleParams
       # don't change pedal command for small oscillations within this value
   # pedal_hyst_gap= 0.01
@@ -34,7 +33,6 @@ def actuator_hystereses(final_pedal, pedal_steady, pedal_hyst_gap_param = 0.015)
   final_pedal = pedal_steady
 
   return final_pedal, pedal_steady
-
 class CarController:
   def __init__(self, dbc_name, CP, VM):
     self.CP = CP
@@ -47,7 +45,7 @@ class CarController:
     self.last_steer_frame = 0
     self.last_button_frame = 0
     self.cancel_counter = 0
-    #self.pedal_steady = 0.
+    self.pedal_steady = 0.
 
     self.lka_steering_cmd_counter = 0
     self.lka_icon_status_last = (False, False)
@@ -71,27 +69,25 @@ class CarController:
   def calc_pedal_command(accel: float, long_active: bool, car_velocity) -> float:
     if not long_active: return 0.
 
-    accGain = 0.1429  # This value is the result of testing by several users.
-
-    DecelZero = interp(car_velocity, [0., 3, 10, 15, 30], [0, 0.185, 0.245, 0.25, 0.280])
-    AccelZero = interp(car_velocity, [0., 3, 10, 15, 30], [0, 0.130, 0.185, 0.215, 0.280])
-    ZeroRatio = interp(accel, [-3.5, 2], [1.0, 0.0])
-    zero = DecelZero * ZeroRatio + AccelZero * (1 - ZeroRatio)
-
-    pedal_gas = clip((zero + accel * accGain), 0.0, 1.0)
-
-    #zero = 0.1667  # 40/256
-    #accGain = interp(accel, [-4, 0, 2],[0.8333, zero, 0.8333])
+    # Boltpilot pedal
+    # accGain = 0.1429  # This value is the result of testing by several users.
+    #
+    # DecelZero = interp(car_velocity, [0., 3, 10, 15, 30], [0, 0.185, 0.245, 0.25, 0.280])
+    # AccelZero = interp(car_velocity, [0., 3, 10, 15, 30], [0.05, 0.130, 0.185, 0.215, 0.280])
+    # ZeroRatio = interp(accel, [-3.5, 2], [1.0, 0.0])
+    # zero = DecelZero * ZeroRatio + AccelZero * (1 - ZeroRatio)
+    #
+    # pedal_gas = clip((zero + accel * accGain), 0.0, 1.0)
+    #
+    #OPGM pedal
+    zero = 0.15625  # 40/256
+    accGain = interp(abs(accel), [0, 1.5],[0.2, 1-zero])
     # if accel > 0.:
     #   # Scales the accel from 0-1 to 0.156-1
-    #   pedal_gas = clip((zero + accGain * accel), 0., 1.)
-    #
+    #   pedal_gas = clip(((1 - zero) * accel + zero), 0., 1.)
     # else:
     #   # if accel is negative, -0.1 -> 0.015625
-    #   pedal_gas = clip(zero + accel, 0., 1.0)  # Make brake the same size as gas, but clip to regen
-    # pedal_gas = clip((zero + accGain * accel), 0., 1.)
-
-    
+    pedal_gas = clip(zero + accGain * accel, 0., 1)  # Make brake the same size as gas, but clip to regen
 
     return pedal_gas
 
