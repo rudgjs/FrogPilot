@@ -799,10 +799,6 @@ void AnnotatedCameraWidget::initializeGL() {
   qInfo() << "OpenGL renderer:" << QString((const char*)glGetString(GL_RENDERER));
   qInfo() << "OpenGL language version:" << QString((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-  //Add brake and regen icon for BoltEV
-  ic_brake = loadPixmap("../assets/images/img_brake_disc.png").scaled(img_size, img_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-  ic_regenPaddle = loadPixmap("../assets/images/img_regen.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
   prev_draw_t = millis_since_boot();
   setBackgroundColor(bg_colors[STATUS_DISENGAGED]);
 }
@@ -1665,6 +1661,10 @@ void AnnotatedCameraWidget::drawBrakeRegen(QPainter &painter){
   const SubMaster &sm = *(uiState()->sm);
   //auto car_state = sm["carState"].getCarState();
   auto car_control = sm["carControl"].getCarControl();
+
+  //Add brake and regen icon for BoltEV
+  ic_brake = loadPixmap("../assets/images/img_brake_disc.png").scaled(img_size, img_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+  ic_regenPaddle = loadPixmap("../assets/images/img_regen.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
   /* brake
   bool brake_valid = car_state.getBrakeLights();
