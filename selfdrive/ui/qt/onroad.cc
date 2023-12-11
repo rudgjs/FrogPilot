@@ -799,6 +799,10 @@ void AnnotatedCameraWidget::initializeGL() {
   qInfo() << "OpenGL renderer:" << QString((const char*)glGetString(GL_RENDERER));
   qInfo() << "OpenGL language version:" << QString((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+  //Add brake and regen icon for BoltEV
+  ic_brake = loadPixmap("../assets/images/img_brake_disc.png").scaled(img_size, img_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+  ic_regenPaddle = loadPixmap("../assets/images/img_regen.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
   prev_draw_t = millis_since_boot();
   setBackgroundColor(bg_colors[STATUS_DISENGAGED]);
 }
@@ -1648,4 +1652,32 @@ void AnnotatedCameraWidget::drawTurnSignals(QPainter &p) {
     drawSignal(turnSignalLeft, leftSignalXPosition, false, blindSpotLeft);
     drawSignal(turnSignalRight, rightSignalXPosition, true, blindSpotRight);
   }
+}
+//Regen for BoltEV
+void AnnotatedCameraWidget::drawBrakeRegen(QPainter &painter){
+  painter.save();
+
+  int offset = UI_BORDER_SIZE + btn_size / 2 + 25;  //UI_BORDER_SIZE = 30, btn_size = 192
+  int xOffset = compass && map_settings_btn->isEnabled() ? (rightHandDM ? -350 : 350) + (onroadAdjustableProfiles ? 75 : 0) : offset + (onroadAdjustableProfiles ? 275 : 0);
+  int x = rightHandDM ? width() - xOffset : xOffset;
+  int y = height() - offset;
+
+  const SubMaster &sm = *(uiState()->sm);
+  //auto car_state = sm["carState"].getCarState();
+  auto car_control = sm["carControl"].getCarControl();
+
+  /* brake
+  bool brake_valid = car_state.getBrakeLights();
+  float img_alpha = brake_valid ? 1.0f : 0.15f;
+  float bg_alpha = brake_valid ? 0.3f : 0.1f;
+  drawIcon(painter, QPoint(x + 96, y), ic_brake, QColor(0, 0, 0, (255 * bg_alpha)), img_alpha);
+  */
+
+  //regen Paddle
+  bool regen_valid = car_control.getActuators().getRegenPaddle();
+  float img_alpha = regen_valid ? 1.0 : 0.15;
+  float bg_alpha = regen_valid ? 0.3 : 0.1;
+  drawIcon(painter, QPoint(x + 96, y), ic_regenPaddle, QColor(0, 0, 0, (255 * bg_alpha)), img_alpha);
+
+  painter.restore();
 }
