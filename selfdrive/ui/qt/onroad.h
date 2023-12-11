@@ -232,6 +232,8 @@ protected:
 
   double prev_draw_t = 0;
   FirstOrderFilter fps_filter;
+
+  QPixmap ic_regenPaddle;
 };
 
 // container for all onroad widgets
