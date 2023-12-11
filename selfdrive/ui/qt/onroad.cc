@@ -450,13 +450,7 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   main_layout->setMargin(UI_BORDER_SIZE);
   main_layout->setSpacing(0);
 
-  experimental_btn = new ExperimentalButton(this);
-
-  map_settings_btn = new MapSettingsButton(this);
-
-  dm_img = loadPixmap("../assets/img_driver_face.png", {img_size + 5, img_size + 5});
-
-  // FrogPilot widgets
+  // Neokii screen recorder
   QHBoxLayout *top_right_layout = new QHBoxLayout();
   top_right_layout->setSpacing(0);
   recorder_btn = new ScreenRecorder(this);
@@ -1671,3 +1665,17 @@ void AnnotatedCameraWidget::drawBrakeRegen(QPainter &painter){
 
   painter.restore();
 }
+
+/*
+void AnnotatedCameraWidget::drawDriverState(QPainter &painter, const UIState *s) {
+  painter.save();
+
+  // base icon
+  int offset = UI_BORDER_SIZE + btn_size / 2 + 25;
+  int xOffset = compass && map_settings_btn->isEnabled() ? (rightHandDM ? -350 : 350) + (onroadAdjustableProfiles ? 75 : 0) : offset + (onroadAdjustableProfiles ? 275 : 0);
+  int x = rightHandDM ? width() - xOffset : xOffset;
+  int y = height() - offset;
+  float opacity = dmActive ? 0.65 : 0.2;
+  drawIcon(painter, QPoint(x, y), dm_img, blackColor(70), opacity);
+
+*/
