@@ -64,7 +64,7 @@ class CarController:
     #
     #OPGM pedal
     zero = 0.15625  # 40/256
-    accGain = interp(abs(accel), [0, 1.5],[0.2, 1-zero])
+    accGain = interp(abs(accel), [0, 0.5, 1.5],[0.1667, 1-(zero*1.5), 1-zero])
     # if accel > 0.:
     #   # Scales the accel from 0-1 to 0.156-1
     #   pedal_gas = clip(((1 - zero) * accel + zero), 0., 1.)
