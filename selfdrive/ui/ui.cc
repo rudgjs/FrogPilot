@@ -347,7 +347,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "carState", "liveLocationKalman", "driverStateV2",
     "wideRoadCameraState", "managerState", "navInstruction", "navRoute", "uiPlan", "carControl",
-    "gpsLocationExternal", "lateralPlan", "longitudinalPlan"
+    "gpsLocationExternal", "lateralPlan", "longitudinalPlan", "naviData"
   });
 
   language = QString::fromStdString(params.get("LanguageSetting"));
@@ -395,6 +395,7 @@ void UIState::update() {
 }
 
 void UIState::setPrimeType(PrimeType type) {
+    type = PrimeType::LITE;
   if (type != prime_type) {
     bool prev_prime = hasPrime();
 

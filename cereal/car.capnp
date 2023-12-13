@@ -118,6 +118,9 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     paramsdTemporaryError @50;
     paramsdPermanentError @119;
 
+    # NDA Neokii
+    slowingDownSpeedSound @126;
+
     # FrogPilot Events
     frogSteerSaturated @120;
     greenLight @121;
@@ -426,6 +429,8 @@ struct CarControl {
       prompt @6;
       promptRepeat @7;
       promptDistracted @8;
+
+      speedDown @9;
     }
   }
 

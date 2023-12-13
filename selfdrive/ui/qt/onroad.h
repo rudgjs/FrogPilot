@@ -28,7 +28,7 @@ class OnroadAlerts : public QWidget {
   Q_OBJECT
 
 public:
-  OnroadAlerts(QWidget *parent = 0) : QWidget(parent) {}
+  OnroadAlerts(QWidget *parent = 0) : QWidget(parent) {};
   void updateAlert(const Alert &a);
 
 protected:
@@ -214,6 +214,13 @@ private:
   size_t animationFrameIndex;
   std::unordered_map<int, std::pair<QString, std::pair<QColor, std::map<double, QBrush>>>> themeConfiguration;
   std::vector<QPixmap> signalImgVector;
+
+  //NDA
+  QPixmap ic_nda;
+  QPixmap ic_hda;
+  QPixmap ic_nda2;
+  QPixmap ic_hda2;
+  void drawRoadLimitSpeed(QPainter &p);
 
 protected:
   void paintGL() override;
