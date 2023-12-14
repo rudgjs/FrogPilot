@@ -1719,12 +1719,12 @@ void AnnotatedCameraWidget::drawRoadLimitSpeed(QPainter &p) {
   //
   if(limit_speed > 0) {
     QRect board_rect = QRect(x_start, y_start+board_height-board_width, board_width, board_width);
-    int padding = 14;
+    int padding = 0;
     board_rect.adjust(padding, padding, -padding, -padding);
     p.setBrush(QBrush(Qt::white));
     p.drawEllipse(board_rect);
 
-    padding = 18;
+    padding = 0;
     board_rect.adjust(padding, padding, -padding, -padding);
     p.setBrush(Qt::NoBrush);
     p.setPen(QPen(Qt::red, 25));
@@ -1758,7 +1758,7 @@ void AnnotatedCameraWidget::drawRoadLimitSpeed(QPainter &p) {
       QFontMetrics fm(font);
       int width = fm.width(strLeftDist);
 
-      padding = 10;
+      padding = 0;
 
       int center_x = x_start + board_width / 2;
       rcLeftDist.setRect(center_x - width / 2, y_start+board_height+15, width, font.pixelSize()+10);
