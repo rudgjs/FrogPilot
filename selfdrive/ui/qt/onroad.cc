@@ -472,8 +472,10 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   dm_img = loadPixmap("../assets/img_driver_face.png", {img_size + 5, img_size + 5});
 
   // NDA neokii
-  ic_nda = loadPixmap("../assets/images/img_nda.png", {img_size, img_size});
-  ic_hda = loadPixmap("../assets/images/img_hda.png", {img_size, img_size});
+  ic_nda = QPixmap("../assets/images/img_nda.png");
+  ic_hda = QPixmap("../assets/images/img_hda.png");
+  ic_nda2 = QPixmap("../assets/images/img_nda2.png");
+  ic_hda2 = QPixmap("../assets/images/img_hda2.png");
 
   ic_regenPaddle = loadPixmap("../assets/images/img_regen.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
