@@ -227,6 +227,8 @@ class Controls:
 
     self.update_frogpilot_params()
 
+    self.regenPressed = False
+
   def set_initial_state(self):
     if REPLAY:
       controls_state = Params().get("ReplayControlsState")

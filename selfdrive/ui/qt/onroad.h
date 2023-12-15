@@ -234,12 +234,20 @@ protected:
   void drawHud(QPainter &p);
   void drawDriverState(QPainter &painter, const UIState *s);
   void paintEvent(QPaintEvent *event) override;
+  void drawBrakeRegen(QPainter &painter);
   inline QColor redColor(int alpha = 255) { return QColor(201, 34, 49, alpha); }
   inline QColor whiteColor(int alpha = 255) { return QColor(255, 255, 255, alpha); }
   inline QColor blackColor(int alpha = 255) { return QColor(0, 0, 0, alpha); }
 
   double prev_draw_t = 0;
   FirstOrderFilter fps_filter;
+
+  const int radius = 192;
+  const int img_size = (radius / 2) * 1.5;
+
+  uint64_t last_update_params;
+
+  QPixmap ic_regenPaddle;
 };
 
 // container for all onroad widgets
