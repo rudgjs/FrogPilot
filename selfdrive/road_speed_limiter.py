@@ -54,7 +54,7 @@ class NaviServer:
     gps_thread.start()
 
   def gps_thread(self):
-    rk = Ratekeeper(3.0, print_delay_threshold=None)
+    rk = Ratekeeper(1.0, print_delay_threshold=None)
     while True:
       self.gps_timer()
       rk.keep_time()
@@ -66,26 +66,26 @@ class NaviServer:
         if self.gps_sm.updated['gpsLocationExternal']:
           self.location = self.gps_sm['gpsLocationExternal']
 
-        if self.location is not None:
-          json_location = json.dumps({"location": [
-            self.location.latitude,
-            self.location.longitude,
-            self.location.altitude,
-            self.location.speed,
-            self.location.bearingDeg,
-            self.location.accuracy,
-            self.location.unixTimestampMillis,
-            # self.location.source,
-            # self.location.vNED,
-            self.location.verticalAccuracy,
-            self.location.bearingAccuracyDeg,
-            self.location.speedAccuracy,
-          ]})
+          if self.location is not None:
+            json_location = json.dumps({"location": [
+              self.location.latitude,
+              self.location.longitude,
+              self.location.altitude,
+              self.location.speed,
+              self.location.bearingDeg,
+              self.location.accuracy,
+              self.location.unixTimestampMillis,
+              # self.location.source,
+              # self.location.vNED,
+              self.location.verticalAccuracy,
+              self.location.bearingAccuracyDeg,
+              self.location.speedAccuracy,
+            ]})
 
-          address = (self.remote_gps_addr[0], Port.LOCATION_PORT)
-          self.gps_socket.sendto(json_location.encode(), address)
-
-    except:
+            address = (self.remote_gps_addr[0], Port.LOCATION_PORT)
+            self.gps_socket.sendto(json_location.encode(), address)
+    except Exception as err:
+      traceback.print_exc()
       self.remote_gps_addr = None
 
   def get_broadcast_address(self):
