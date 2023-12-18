@@ -485,6 +485,11 @@ class Controls:
     if self.sm['frogpilotLongitudinalPlan'].greenLight:
       self.events.add(FrogPilotEventName.greenLight)
 
+    # kans: events for roadSpeedLimiter
+    if self.slowing_down_sound_alert:
+      self.events.add(EventName.slowingDownSpeedSound)
+      self.slowing_down_sound_alert = False
+
   def data_sample(self):
     """Receive data from sockets and update carState"""
 
