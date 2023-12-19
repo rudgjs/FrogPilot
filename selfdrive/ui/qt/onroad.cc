@@ -476,7 +476,6 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   ic_hda = QPixmap("../assets/images/img_hda.png");
   ic_nda2 = QPixmap("../assets/images/img_nda2.png");
   ic_hda2 = QPixmap("../assets/images/img_hda2.png");
-
   ic_regenPaddle = loadPixmap("../assets/images/img_regen.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
   // Initialize FrogPilot widgets
@@ -1730,7 +1729,7 @@ void AnnotatedCameraWidget::drawRoadLimitSpeed(QPainter &p) {
   int board_height = 384;
 
   const int corner_radius = 32;
-  int max_speed_height = 210;
+  int max_speed_height = 0;
 
   QColor bgColor = QColor(0, 0, 0, 166);
 
