@@ -1722,11 +1722,11 @@ void AnnotatedCameraWidget::drawRoadLimitSpeed(QPainter &p) {
       }
   }
 
-  const int x_start = 35;
-  const int y_start = 240;
+  const int x_start = 45;
+  const int y_start = 250;
 
-  int board_width = 0;
-  int board_height = 0;
+  int board_width = 172;
+  int board_height = 384;
 
   const int corner_radius = 32;
   int max_speed_height = 0;
@@ -1750,7 +1750,7 @@ void AnnotatedCameraWidget::drawRoadLimitSpeed(QPainter &p) {
       path.addRoundedRect(QRectF(x_start, y_start, board_width, board_height), corner_radius, corner_radius);
     }
     else {
-      max_speed_height = 0;
+      max_speed_height = 235;
       board_height = max_speed_height;
       path.addRoundedRect(QRectF(x_start, y_start, board_width, board_height), corner_radius, corner_radius);
     }
