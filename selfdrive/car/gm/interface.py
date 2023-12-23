@@ -3,6 +3,7 @@ from cereal import car, custom
 from math import fabs, exp
 from panda import Panda
 
+from openpilot.common.numpy_fast import interp, clip
 from openpilot.common.conversions import Conversions as CV
 from openpilot.common.params import Params
 from openpilot.selfdrive.car import create_button_events, get_safety_config
@@ -334,7 +335,7 @@ class CarInterface(CarInterfaceBase):
         ret.longitudinalTuning.kpV = [1., 1.]
         ret.longitudinalTuning.kiBP = [0., 35.0]
         ret.longitudinalTuning.kiV = [0.0, 0.01]
-        ret.longitudinalTuning.kf = 0.5
+        ret.longitudinalTuning.kf = interp(CS.out.vEgo,[10, 30],[0.4, 0.8])
         ret.stoppingDecelRate = 0.8
       else:  # Pedal used for SNG, ACC for longitudinal control otherwise
         ret.safetyConfigs[0].safetyParam |= Panda.FLAG_GM_HW_CAM_LONG
