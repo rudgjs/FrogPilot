@@ -54,9 +54,18 @@ class LongControl:
   def __init__(self, CP):
     self.CP = CP
     self.long_control_state = LongCtrlState.off  # initialized to off
-    self.pid = PIDController((CP.longitudinalTuning.kpBP, CP.longitudinalTuning.kpV),
-                             (CP.longitudinalTuning.kiBP, CP.longitudinalTuning.kiV),
-                             k_f=CP.longitudinalTuning.kf, rate=1 / DT_CTRL)
+
+    if ((isinstance(CP.longitudinalTuning.kfBP, list) and len(CP.longitudinalTuning.kfBP) > 0) and
+        (isinstance(CP.longitudinalTuning.kfV, list) and len(CP.longitudinalTuning.kfV) > 0)):
+      self.pid = PIDController((CP.longitudinalTuning.kpBP, CP.longitudinalTuning.kpV),
+                               (CP.longitudinalTuning.kiBP, CP.longitudinalTuning.kiV),
+                               k_f=(CP.longitudinalTuning.kfBP, CP.longitudinalTuning.kfV), rate=1 / DT_CTRL)
+    else:
+      self.pid = PIDController((CP.longitudinalTuning.kpBP, CP.longitudinalTuning.kpV),
+                               (CP.longitudinalTuning.kiBP, CP.longitudinalTuning.kiV),
+                               k_f=CP.longitudinalTuning.kf, rate=1 / DT_CTRL)
+
+
     self.v_pid = 0.0
     self.last_output_accel = 0.0
 
