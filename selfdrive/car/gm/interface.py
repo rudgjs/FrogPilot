@@ -3,6 +3,7 @@ from cereal import car, custom
 from math import fabs, exp
 from panda import Panda
 
+from openpilot.common.numpy_fast import interp, clip
 from openpilot.common.conversions import Conversions as CV
 from openpilot.common.params import Params
 from openpilot.selfdrive.car import create_button_events, get_safety_config
@@ -32,8 +33,12 @@ NON_LINEAR_TORQUE_PARAMS = {
   CAR.SILVERADO: [3.29974374, 1.0, 0.25571356, 0.0465122]
 }
 
-
 class CarInterface(CarInterfaceBase):
+  def __init__(self):
+    self.car_speed = 0.
+  def update(self, CS):
+    self.car_speed = CS.out.vEgo
+
   @staticmethod
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
     return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
@@ -334,7 +339,7 @@ class CarInterface(CarInterfaceBase):
         ret.longitudinalTuning.kpV = [1., 1.]
         ret.longitudinalTuning.kiBP = [0., 35.0]
         ret.longitudinalTuning.kiV = [0.0, 0.01]
-        ret.longitudinalTuning.kf = 0.4
+        ret.longitudinalTuning.kf = interp(self.car_speed, [3, 16], [0.3, 0.8])
         ret.stoppingDecelRate = 0.8
       else:  # Pedal used for SNG, ACC for longitudinal control otherwise
         ret.safetyConfigs[0].safetyParam |= Panda.FLAG_GM_HW_CAM_LONG
