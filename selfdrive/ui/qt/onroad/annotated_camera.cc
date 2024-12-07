@@ -1363,7 +1363,6 @@ PedalIcons::PedalIcons(QWidget *parent) : QWidget(parent) {
 
 void PedalIcons::updateState(const UIScene &scene) {
   acceleration = scene.acceleration;
-  desiredAcceleration = scene.desiredAcceleration;
   brakeLightOn = scene.brake_lights_on;
   dynamicPedals = scene.dynamic_pedals_on_ui;
   standstill = scene.standstill;
