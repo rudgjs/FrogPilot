@@ -1287,7 +1287,7 @@ void AnnotatedCameraWidget::drawLeadInfo(QPainter &p) {
   constexpr int maxAccelDuration = 5000;
 
   double acceleration = std::round(currentAcceleration * 100) / 100;
-  double targetAcceleration = = std::round(desiredAcceleration * 100) / 100;
+  double targetAcceleration = std::round(desiredAcceleration * 100) / 100;
 
   auto resetTimer = [&]() {
     timer.start();
@@ -1304,11 +1304,6 @@ void AnnotatedCameraWidget::drawLeadInfo(QPainter &p) {
   auto createText = [&](const QString &title, double data) {
     return title + QString::number(std::round(data * distanceConversion)) + " " + leadDistanceUnit;
   };
-
-  QString accelText = QString(tr("Accel: %1%2"))
-                      .arg(acceleration * accelerationConversion, 0, 'f', 2)
-                      .arg(accelerationUnit);
-
   QString accelText = QString(tr("T-Accel: %1%2"))
                       .arg(targetAcceleration * accelerationConversion, 0, 'f', 2)
                       .arg(accelerationUnit);
