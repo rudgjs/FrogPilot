@@ -1063,7 +1063,6 @@ void AnnotatedCameraWidget::updateFrogPilotVariables(int alert_height, const UIS
   showConditionalExperimentalStatusBar = scene.cem_status_bar;
 
   currentAcceleration = scene.acceleration;
-  desiredAcceleration = scene.desired_acceleration;
 
   desiredFollow = scene.desired_follow;
   stoppedEquivalence = scene.stopped_equivalence;
